@@ -8,18 +8,11 @@ const updateById = async (req, res, next) => {
 
     const { error } = joiContactSchema.validate(body);
     if (error) {
-      return res.status(400).json({
-        message: error.message,
-      });
-    }
-
-    if (!body) {
-      return res.json({
-        status: "error",
-        code: 404,
+      return res.status(404).json({
         message: "missing fields",
       });
     }
+
     const updatedContact = await contactsOperations.updateContacts(
       contactId,
       body
