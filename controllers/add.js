@@ -1,17 +1,12 @@
-const joiContactSchema = require("../routes/api/validation");
-const contactsOperations = require("../model");
+const { Contact } = require("../models");
 
 const add = async (req, res, next) => {
   try {
     const body = req.body;
-    const { error } = joiContactSchema.validate(body);
-    if (error) {
-      return res.status(400).json({
-        message: "missing required name field",
-      });
+    const newContact = await Contact.create(body);
+    if (Object.keys(body).indexOf("favorite") === -1) {
+      return res.json({ ...newContact, favorite: false });
     }
-
-    const newContact = await contactsOperations.addContact(body);
     return res.status(201).json({ newContact });
   } catch (error) {
     next(error);
