@@ -1,22 +1,12 @@
-const joiContactSchema = require("../routes/api/validation");
-const contactsOperations = require("../model");
+const { Contact } = require("../models");
 
 const updateById = async (req, res, next) => {
   try {
     const body = req.body;
     const { contactId } = req.params;
-
-    const { error } = joiContactSchema.validate(body);
-    if (error) {
-      return res.status(404).json({
-        message: "missing fields",
-      });
-    }
-
-    const updatedContact = await contactsOperations.updateContacts(
-      contactId,
-      body
-    );
+    const updatedContact = await Contact.findByIdAndUpdate(contactId, body, {
+      new: true,
+    });
     if (updatedContact) {
       return res.json({ updatedContact });
     }
