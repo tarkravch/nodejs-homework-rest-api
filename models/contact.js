@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+const { Schema, Types, model } = require("mongoose");
 const Joi = require("joi");
 
 const emailRegexp =
@@ -21,6 +21,11 @@ const contactSchema = Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
   },
   {
     versionKey: false,
@@ -33,6 +38,7 @@ const joiSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
   phone: Joi.string().pattern(phoneRegexp).required(),
   favorite: Joi.boolean(),
+  owner: Joi.string(),
 });
 
 const Contact = model("contact", contactSchema);
