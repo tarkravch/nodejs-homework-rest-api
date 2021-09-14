@@ -1,7 +1,10 @@
 const bcrypt = require("bcryptjs");
 const { Conflict } = require("http-errors");
-
 const { User } = require("../../models");
+const fs = require("fs/promises");
+const path = require("path");
+const usersDir = path.join(__dirname, "../../", "public/avatars");
+const gravatar = require("gravatar");
 
 const signup = async (req, res) => {
   const { email, password } = req.body;
@@ -11,9 +14,16 @@ const signup = async (req, res) => {
   }
 
   const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+  const defaultImg = gravatar.url(email);
+  const newUser = new User({
+    email,
+    password: hashPassword,
+    avatarUrl: `http:${defaultImg}`,
+  });
+  const id = newUser._id.toString();
 
-  const newUser = new User({ email });
-  newUser.setPassword(hashPassword);
+  const dirPath = path.join(usersDir, id);
+  await fs.mkdir(dirPath);
   await newUser.save();
 
   res.status(201).json({

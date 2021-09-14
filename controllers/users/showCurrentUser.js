@@ -2,10 +2,10 @@ const { User } = require("../../models");
 const { Unauthorized } = require("http-errors");
 
 const showCurrentUser = async (req, res) => {
-  const { token } = req.body;
+  const [bearer, token] = req.headers.authorization.split(" ");
   const user = await User.findOne({ token });
 
-  if (!user) {
+  if (!user || bearer !== "Bearer") {
     throw Unauthorized("Not authorized");
   }
   const { email, subscription } = user;

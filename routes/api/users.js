@@ -2,6 +2,7 @@ const express = require("express");
 
 const { joiSchema } = require("../../models/user");
 const {
+  upload,
   validation,
   controllerWrapper,
   authenticate,
@@ -31,4 +32,10 @@ router.get(
   controllerWrapper(authenticate),
   controllerWrapper(ctrl.showCurrentUser)
 );
+router.patch(
+  "/avatars",
+  upload.single("image"),
+  controllerWrapper(ctrl.updateImg)
+);
+
 module.exports = router;

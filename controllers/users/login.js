@@ -12,6 +12,7 @@ const login = async (req, res) => {
     throw new BadRequest("Wrong email");
   }
   const hashPassword = user.password;
+
   const compareResult = bcrypt.compareSync(password, hashPassword);
 
   if (!compareResult) {
