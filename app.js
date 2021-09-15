@@ -1,11 +1,26 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+// const sgMail = require("@sendgrid/mail");
 require("dotenv").config();
-
+const app = express();
 const { usersRouter, contactsRouter } = require("./routes/api");
 
-const app = express();
+/* const { SENDGRID_API_KEY } = process.env;
+
+sgMail.setApiKey(SENDGRID_API_KEY);
+
+const mail = {
+  to: "tarkravch@gmail.com",
+  from: "taras-kravchuk@i.ua",
+  subject: "Регистрация на сайте",
+  html: "<p>Поздравляем с успешной регистрацией на нашем сайте</p>",
+};
+
+sgMail
+  .send(mail)
+  .then(() => console.log("Email success sent"))
+  .catch((error) => console.log(error.message)); */
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 

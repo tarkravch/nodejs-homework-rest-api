@@ -11,6 +11,9 @@ const login = async (req, res) => {
   if (!user) {
     throw new BadRequest("Wrong email");
   }
+  if (!user.verify) {
+    throw new BadRequest("Email not confirmed");
+  }
   const hashPassword = user.password;
 
   const compareResult = bcrypt.compareSync(password, hashPassword);
