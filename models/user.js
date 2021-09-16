@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
-// const { v4 } = require("uuid");
+
 
 const emailRegexp =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -49,10 +49,6 @@ userSchema.methods.setPassword = function (password) {
 userSchema.methods.comparePassword = function (password) {
   return bcrypt.compareSync(password, this.password);
 };
-
-/* userSchema.methods.createVerifyToken = function (password) {
-  this.verifyToken = v4();
-}; */
 
 const joiSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
