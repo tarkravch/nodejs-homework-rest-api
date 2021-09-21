@@ -1,6 +1,6 @@
 const express = require("express");
 
-const { joiSchema } = require("../../models/user");
+const { joiUserSchema } = require("../../models/user");
 const {
   upload,
   validation,
@@ -11,7 +11,7 @@ const ctrl = require("../../controllers/users");
 
 const router = express.Router();
 
-const userValidationMiddleware = validation(joiSchema);
+const userValidationMiddleware = validation(joiUserSchema);
 
 router.post(
   "/signup",

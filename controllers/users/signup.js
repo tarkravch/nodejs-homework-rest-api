@@ -25,8 +25,7 @@ const signup = async (req, res) => {
   });
   const id = newUser._id.toString();
 
-  const dirPath = path.join(usersDir, id);
-  await fs.mkdir(dirPath);
+  await fs.mkdir(path.join(usersDir, id));
   await newUser.save();
 
   const { verificationToken } = newUser;
