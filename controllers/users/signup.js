@@ -5,6 +5,8 @@ const fs = require("fs/promises");
 const path = require("path");
 const usersDir = path.join(__dirname, "../../", "public/avatars");
 const gravatar = require("gravatar");
+const { v4 } = require("uuid");
+const { sendMail } = require("../../utils");
 
 const signup = async (req, res) => {
   const { email, password } = req.body;
@@ -18,13 +20,22 @@ const signup = async (req, res) => {
   const newUser = new User({
     email,
     password: hashPassword,
+    verificationToken: v4(),
     avatarUrl: `http:${defaultImg}`,
   });
   const id = newUser._id.toString();
 
-  const dirPath = path.join(usersDir, id);
-  await fs.mkdir(dirPath);
+  await fs.mkdir(path.join(usersDir, id));
   await newUser.save();
+
+  const { verificationToken } = newUser;
+  const data = {
+    to: email,
+    subject: "Подтверждение регистрации на сайте",
+    html: `<a href="http://localhost:3000/api/users/verify/${verificationToken}">Подтвердите регистрацию</a>`,
+  };
+
+  await sendMail(data);
 
   res.status(201).json({
     status: "created",
